@@ -1,0 +1,203 @@
+﻿@model SmartWatch.Areas.UserDataSequence.Models.ViewModels.UserDataSequenceViewModel
+
+@{
+    ViewData["Title"] = "AddorEdit";
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" action="/UserDataSequence/UserDataSquence/SaveDataSeq">
+
+            <input name="UserSequenceId" id="UserSequenceId" type="hidden" class="form-control" value="@Model.UserSequenceId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4 align-self-center"><label asp-for="UserId" class="col-md-4 text-right">User Name</label></div>
+                    <div class="col-md-8 align-self-cente">
+                        <select class="form-control" name="UserId" id="UserId">
+                            @foreach (var type in Model.userList)
+                            {
+                                if (type.UserId == Model.UserId)
+                                {
+                                    <option selected value="@type.UserId">@type.Username</option>
+                                }
+                                else
+                                {
+                                    <option selected value="@type.UserId">@type.Username</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4 align-self-center"><label asp-for="Value" class="col-md-4 text-right">Data Sequence</label></div>
+                    <div class="col-md-8 align-self-cente">
+                        <input name="Value" placeholder="Value" id="ValuesInSeconds" class="form-control" value="@Model.ValuesInSeconds" />
+                        <span asp-validation-for="Value" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsSentBloodPressure" class="col-md-4 text-right">Blood Pressure</label></div>
+
+                    <div class="col-md-4 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsSentBloodPressure" id="IsSentBloodPressure" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsSentBloodPressure').val());
+
+                        $("#IsSentBloodPressure").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsSentBloodPressure').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsSentStepCount" class="col-md-4 text-right">Step Count</label></div>
+
+                    <div class="col-md-4 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsSentStepCount" id="IsSentStepCount" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsSentStepCount').val());
+
+                        $("#IsSentStepCount").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsSentStepCount').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsSentBodyTemperature" class="col-md-4 text-right">Body Temperature</label></div>
+
+                    <div class="col-md-4 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsSentBodyTemperature" id="IsSentBodyTemperature" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsSentBodyTemperature').val());
+
+                        $("#IsSentBodyTemperature").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsSentBodyTemperature').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsSentHeartRate" class="col-md-4 text-right">Heart Rate</label></div>
+
+                    <div class="col-md-4 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsSentHeartRate" id="IsSentHeartRate" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsSentHeartRate').val());
+
+                        $("#IsSentHeartRate").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsSentHeartRate').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="SendDate" class="col-md-4 text-right">Send Date</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input type="text" class="form-control" id="DateTimeSend" name="SendDate" placeholder="send Date and Time" value='@Model.DateTimeSend.ToString("yyyy/MM/dd HH:mm:ss")'>
+
+                        <span class="input-group-text">
+                            <i class="la la-calendar-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="SetDate" class="col-md-4 text-right">Set Date</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input type="text" class="form-control" id="DateTimeSet" name="SetDate" placeholder="Set Date and Time" value='@Model.DateTimeSet.ToString("yyyy/MM/dd HH:mm:ss")'>
+
+                        <span class="input-group-text">
+                            <i class="la la-calendar-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+<script>
+
+    $('#DateTimeSend').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm',
+
+    });
+    $('#DateTimeSet').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm',
+    });
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

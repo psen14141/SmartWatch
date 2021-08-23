@@ -1,0 +1,147 @@
+﻿@model IEnumerable<SmartWatch.DbModels.Country>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>登録国</h5>
+<script>
+    $(document).ready(function () {
+        $('#dtDesign').DataTable({
+            "lengthMenu": [10, 20, 30, 40, 50],
+            "language": {
+                "search": "検索:",
+                "paginate": {
+                    "first": "一ページ目",
+                    "last": "最後のページ",
+                    "next": "次へ",
+                    "previous": "前へ"
+                },
+                "lengthMenu": " _MENU_ 件表示",
+                "info": "検索結果 _TOTAL_ 以上 のうち _START_ ~ _END_件",
+                "infoEmpty": "検索結果 0 以上 のうち 0 ~ 0件",
+                "emptyTable": "条件に一致する結果は見つかりませんでした",
+                "zeroRecords": "条件に一致する結果は見つかりませんでした",
+            },
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+
+<p>
+
+    <a class="btn btn-primary mb-3" href="#" onclick="AddorEdit(0)">追加</a>
+
+</p>
+<table id="dtDesign" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.CountryCode)
+                </th>*@
+            <th>
+                国の名前
+            </th>
+            <th>
+                時間の時差
+            </th>
+            <th>
+                分単位の時差
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.CountryIsDelete)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.CountryCode)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeDifferenceHour)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeDifferenceMinute)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.CountryIsDelete)
+                    </td>*@
+            <td>
+                <a href="#" onclick="AddorEdit(@item.CountryCode)" class="btn btn-primary">編集</a>
+
+
+                @*<input type="button" class="btn btn-danger" onclick="DeleteConfirmation('/Countries/Country/Delete/?Id=@item.CountryCode')" value=" 削除 " />*@
+                <a class="btn btn-danger" style="color: white;" onclick="DeleteConfirmation('/Countries/Country/Delete/?Id=@item.CountryCode', null, null, true, '削除しますか？', 'このデータを完全に消去しまか?')">削除</a>
+
+            </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div id="AddorEdit" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">国情報</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="formArea">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="SaveCountry()" class="btn btn-primary">保存</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function AddorEdit(id) {
+        $('#AddorEdit').modal(); //open the model
+        $("#formArea").html(""); // Clear existing are
+
+        $.ajax({
+            method: "GET",
+            url: "/Countries/Country/AddorEdit/" + id,
+
+        })
+            .done(function (msg) {
+                $("#formArea").html(msg);
+
+            });
+    }
+
+
+    function SaveCountry() {
+
+        let postData = new FormData();
+        postData.append('CountryCode', $("#CountryCode").val());
+        postData.append('Country1', $("#Country1").val());
+        postData.append('TimeDifferenceHour', $("#TimeDifferenceHour").val());
+        postData.append('TimeDifferenceMinute', $("#TimeDifferenceMinute").val());
+
+        $.ajax({
+            method: "POST",
+            url: "/Countries/Country/SaveCountry/",
+            data: postData,
+            contentType: false,
+            processData: false,
+        }).done(function (data) {
+            $('#AddorEdit').modal('hide')
+            location.reload();
+        });
+    }
+</script>

@@ -1,0 +1,399 @@
+﻿@model IEnumerable<SmartWatch.Areas.Users.Models.ViewModels.ProfileViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>Patients Registration</h5>
+
+<script>
+    $(document).ready(function () {
+        $('#dtDesign').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+<p>
+
+    <a class="btn btn-primary mb-3" href="#" onclick="AddorEdit(0)">Add New Patient</a>
+
+</p>
+
+<table id="dtDesign" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.UserId)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Password)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreateTime)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Mobile)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.UserSecret)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserDynamickey)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.RoleName)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.ProfileId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserIsdelete)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.UserId)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Paassword)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateTime)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mobile)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.UserSecret)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserDynamickey)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.ProfileId)
+                    </td>*@
+            <td>
+                @*<a href="#" onclick="AddorEdit(@item.UserId)" class="btn btn-primary">Edit</a>*@
+                <a href="#" onclick="EditPatient(@item.UserId)" class="btn btn-primary">Edit</a>
+
+                @*@Html.ActionLink("Delete", "Delete", new { id = item.UserId }, new { @class = "btn btn-danger" })*@
+                <input type="button" class="btn btn-danger" onclick="DeleteConfirmation('/Users/PatientProfile/Delete/?Id=@item.UserId')" value=" Delete " />
+                <a class="btn btn-primary" href="/Users/PatientProfile/PatientAssign/?Id=@item.UserId">Patient Assign</a>
+                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+                @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
+                @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+            </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="AddorEdit" class="modal" tabindex="-1" role="dialog">
+    <div class="" modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Patient Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="formArea">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="SaveProfilePatient()" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function AddorEdit(id) {
+        $('#AddorEdit').modal(); //open the model
+        $("#formArea").html(""); // Clear existing are
+
+
+        $.ajax({
+            method: "GET",
+            url: "/Users/PatientProfile/AddorEdit/" + id,
+
+        })
+
+            .done(function (msg) {
+                $("#formArea").html(msg);
+
+            });
+
+    }
+
+
+    function SaveProfilePatient() {
+       
+        let postData = new FormData();
+        postData.append('UserId', $("#UserId").val());
+        postData.append('RoleId', $("#RoleId").val());
+        postData.append('ProfileId', $("#ProfileId").val());
+
+        //if (!IsFilled("Username", "Username", "Please fill the User name")) {
+        //    return;
+        //}
+        postData.append('Username', $("#Username").val());
+
+
+        //if (!IsFilled("Email", "Email", "Please fill the Email")) {
+        //    return;
+        //}
+        postData.append('Email', $("#Email").val());
+
+
+        //if (!IsFilled("Password", "Password", "Please fill the Password")) {
+        //    return;
+        //}
+        postData.append('Password', $("#Password").val());
+
+
+        postData.append('CreateTime', $("#CreateTime").val());
+
+
+        //if (!IsFilled("Mobile", "Mobile", "Please fill the Mobile")) {
+        //    return;
+        //}
+        postData.append('Mobile', $("#Mobile").val());
+
+
+        //if (!IsFilled("UserSecret", "UserSecret", "Please fill the UserSecret")) {
+        //    return;
+        //}
+        postData.append('UserSecret', $("#UserSecret").val());
+
+
+        //if (!IsFilled("UserDynamickey", "UserDynamickey", "Please fill the UserDynamickey")) {
+        //    return;
+        //}
+        postData.append('UserDynamickey', $("#UserDynamickey").val());
+
+
+        //if (!IsFilled("FirstName", "FirstName", "Please fill the FirstName")) {
+        //    return;
+        //}
+        postData.append('FirstName', $("#FirstName").val());
+
+
+        //if (!IsFilled("LastName", "LastName", "Please fill the LastName")) {
+        //    return;
+        //}
+        postData.append('LastName', $("#LastName").val());
+
+
+        //if (!IsFilled("Address", "Address", "Please fill the Address")) {
+        //    return;
+        //}
+        postData.append('Address', $("#Address").val());
+
+
+        //if (!IsFilled("City", "City", "Please fill the City")) {
+        //    return;
+        //}
+        postData.append('City', $("#City").val());
+
+
+        //if (!IsFilled("PostalCode", "PostalCode", "Please fill the PostalCode")) {
+        //    return;
+        //}
+        postData.append('PostalCode', $("#PostalCode").val());
+
+
+        //if (!IsFilled("CountryId", "CountryId", "Please fill the CountryName")) {
+        //    return;
+        //}
+        postData.append('CountryId', $("#CountryId").val());
+
+
+        //if (!IsFilled("CompanyId", "CompanyId", "Please fill the CompanyName")) {
+        //    return;
+        //}
+        postData.append('CompanyId', $("#CompanyId").val());
+
+
+        //if (!IsFilled("Profilecol", "Profilecol", "Please fill the Profilecol")) {
+        //    return;
+        //}
+        postData.append('Profilecol', $("#Profilecol").val());
+        //alert("save2");
+
+        $.ajax({
+            method: "POST",
+            url: "/Users/PatientProfile/SaveProfilePatient/",
+            data: postData,
+            contentType: false,
+            processData: false,
+        }).done(function (data) {
+            $('#AddorEdit').modal('hide')
+            location.reload();
+        });
+    }
+</script>
+
+<div id="EditPatient" class="modal" tabindex="-1" role="dialog">
+    <div class="" modal-dialog-full-width modal-dialog momodel modal-fluid" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Patient Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="formArea1">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="EditSaveProfilePatient()" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function EditPatient(id) {
+        $('#EditPatient').modal(); //open the model
+        $("#formArea1").html(""); // Clear existing are
+
+
+        $.ajax({
+            method: "GET",
+            url: "/Users/PatientProfile/EditPatient/" + id,
+
+        })
+
+            .done(function (msg) {
+                $("#formArea1").html(msg);
+
+            });
+
+    }
+
+
+
+    function EditSaveProfilePatient() {
+
+        let postData = new FormData();
+        postData.append('UserId', $("#UserId").val());
+        postData.append('RoleId', $("#RoleId").val());
+        postData.append('ProfileId', $("#ProfileId").val());
+
+        if (!IsFilled("Username", "Username", "Please fill the User name")) {
+            return;
+        }
+        postData.append('Username', $("#Username").val());
+
+
+        if (!IsFilled("Email", "Email", "Please fill the Email")) {
+            return;
+        }
+        postData.append('Email', $("#Email").val());
+
+
+        postData.append('CreateTime', $("#CreateTime").val());
+
+
+        if (!IsFilled("Mobile", "Mobile", "Please fill the Mobile")) {
+            return;
+        }
+        postData.append('Mobile', $("#Mobile").val());
+
+
+        if (!IsFilled("UserSecret", "UserSecret", "Please fill the UserSecret")) {
+            return;
+        }
+        postData.append('UserSecret', $("#UserSecret").val());
+
+
+        if (!IsFilled("UserDynamickey", "UserDynamickey", "Please fill the UserDynamickey")) {
+            return;
+        }
+        postData.append('UserDynamickey', $("#UserDynamickey").val());
+
+
+        if (!IsFilled("FirstName", "FirstName", "Please fill the FirstName")) {
+            return;
+        }
+        postData.append('FirstName', $("#FirstName").val());
+
+
+        if (!IsFilled("LastName", "LastName", "Please fill the LastName")) {
+            return;
+        }
+        postData.append('LastName', $("#LastName").val());
+
+
+        if (!IsFilled("Address", "Address", "Please fill the Address")) {
+            return;
+        }
+        postData.append('Address', $("#Address").val());
+
+
+        if (!IsFilled("City", "City", "Please fill the City")) {
+            return;
+        }
+        postData.append('City', $("#City").val());
+
+
+        if (!IsFilled("PostalCode", "PostalCode", "Please fill the PostalCode")) {
+            return;
+        }
+        postData.append('PostalCode', $("#PostalCode").val());
+
+
+
+        if (!IsFilled("CountryId", "CountryId", "Please fill the CountryName")) {
+            return;
+        }
+        postData.append('CountryId', $("#CountryId").val());
+
+
+        if (!IsFilled("CompanyId", "CompanyId", "Please fill the CompanyName")) {
+            return;
+        }
+        postData.append('CompanyId', $("#CompanyId").val());
+
+
+        if (!IsFilled("Profilecol", "Profilecol", "Please fill the Profilecol")) {
+            return;
+        }
+        postData.append('Profilecol', $("#Profilecol").val());
+
+
+        $.ajax({
+            method: "POST",
+            url: "/Users/PatientProfile/EditSaveProfilePatient/",
+            data: postData,
+            contentType: false,
+            processData: false,
+        }).done(function (data) {
+            $('#formArea1').modal('hide')
+            location.reload();
+        });
+    }
+</script>

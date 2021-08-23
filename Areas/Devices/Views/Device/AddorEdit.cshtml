@@ -1,0 +1,48 @@
+﻿@model SmartWatch.Areas.Devices.Models.ViewModels.DeviceViewModel
+
+@{
+    ViewData["Title"] = "AddorEdit";
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" action="/Devices/Device/SaveDevice">
+
+            <input name="DeviceId" id="DeviceId" type="hidden" class="form-control" value="@Model.DeviceId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input name="RegDate" id="RegDate" type="hidden" class="form-control" value="@Model.RegDate" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="Type" class="col-md-4 text-right">Device Name</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input name="Type" placeholder="Device Name" id="Type" class="form-control" value="@Model.Type" />
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="DeviceCode" class="col-md-4 text-right">Device Code</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input name="DeviceCode" placeholder="DeviceCode" id="DeviceCode" class="form-control" value="@Model.DeviceCode" />
+                        <span asp-validation-for="DeviceCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

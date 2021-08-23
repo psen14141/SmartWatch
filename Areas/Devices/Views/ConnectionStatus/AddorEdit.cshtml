@@ -1,0 +1,70 @@
+﻿@model SmartWatch.Areas.Devices.Models.ViewModels.ConnectionStatusViewModel
+
+@{
+    ViewData["Title"] = "AddorEdit";
+
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" action="/Devices/ConnectionStatus/SaveConnectionStatus">
+
+            <input name="ConnectionstatusId" id="ConnectionstatusId" type="hidden" class="form-control" value="@Model.ConnectionstatusId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="ConnectId" class="col-md-4 text-right">ConnectId</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input name="ConnectId" placeholder="ConnectId" id="ConnectId" class="form-control" value="@Model.ConnectId" />
+                        <span asp-validation-for="ConnectId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="Status" class="col-md-4 text-right">Status</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input name="Status" placeholder="Status" id="Status" class="form-control" value="@Model.Status" />
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="SyncPeriodStartTime" class="col-md-4 text-right">SyncPeriodStartTime</label></div>
+                    <div class="col-md-6 align-self-cente">
+                        <input name="SyncPeriodStartTime" placeholder="SyncPeriodStartTime" id="SyncPeriodStartTime" class="form-control" value="@Model.SyncPeriodStartTime" />
+                        <span asp-validation-for="SyncPeriodStartTime" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="SyncPeriodEndTime" class="col-md-4 text-right">SyncPeriodEndTime</label></div>
+                    <div class="col-md-6 align-self-cente">
+                        <input name="SyncPeriodEndTime" placeholder="SyncPeriodEndTime" id="SyncPeriodEndTime" class="form-control" value="@Model.SyncPeriodEndTime" />
+                        <span asp-validation-for="SyncPeriodEndTime" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

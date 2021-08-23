@@ -1,0 +1,91 @@
+﻿@model SmartWatch.Areas.Symptomillnesses.Models.ViewModels.IllnessViewModel
+
+@{
+    ViewData["Title"] = "DetailView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<div class="w3-padding w3-white">
+    <div>
+        <button class="w3-button w3-green" onclick="goBack()"><i class="fa fa-arrow-left"></i></button>
+        <button class="w3-button w3-light-green" onclick="updateDiv()"><i class="fa fa-refresh"></i></button>
+        @*<button class="w3-button w3-light-blue" onclick="Country.Print()"><i class="fa fa-print"></i></button>*@
+        <button class="w3-button w3-light-blue" onclick="PrintDiv()"><i class="fa fa-print"></i></button>
+    </div>
+    <div>
+        <a asp-action="Create" style="font-size:15px; padding-left:10px">戻る</a>
+        <a asp-action="Create" style="font-size:15px; padding-left:10px">編集</a>
+        <a asp-action="Create" style="font-size:15px; padding-right:10px">印刷</a>
+    </div>
+</div>
+
+<div class="w3-container w3-margin-top">
+    <h5 style="text-align:center"><b><u>詳細ビュー</u></b></h5>
+</div>
+
+<div id="divcontent">
+
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            病気
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IllNessName)
+        </dd>
+        <dt class="col-sm-2">
+            説明
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IllnessDescription)
+        </dd>
+    </dl>
+</div>
+
+
+
+
+
+@*-------------------------------------------Back Botton ------------------------------------------*@
+<script>
+    function goBack() {
+        window.location.href = "/Symptomillnesses/Illness/Index";
+    }
+</script>
+
+@***************************************************Length*************************************************@
+<script>
+    $("input").on("keyup", function () {
+        var maxLength = $(this).attr("maxlength");
+        if (maxLength == $(this).val().length) {
+            alert("Characters length exceeds the Limit, please input less than " + maxLength + " characters");
+        }
+    })
+
+    $("textarea").on("keyup", function () {
+        var maxLength = $(this).attr("maxlength");
+        if (maxLength == $(this).val().length) {
+            alert("Characters length exceeds the Limit, please input less than " + maxLength + " characters");
+        }
+    })
+</script>
+
+@***************************************************Print Data**************************************************@
+<script type="text/javascript">
+    function PrintDiv() {
+        var divContents = document.getElementById("divcontent").innerHTML;
+        var printWindow = window.open('', '', 'height=200,width=400');
+        printWindow.document.write('<html><head><title>Print DIV Content</title>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(divContents);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>

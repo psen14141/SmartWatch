@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-head-row">
+                        <div class="card-title">Histrocial Data Statistics</div>
+                        <div class="card-tools">
+                            <a href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
+                                <span class="btn-label">
+                                    <i class="la la-pencil"></i>
+                                </span>
+                                Export
+                            </a>
+                            <a href="#" class="btn btn-info btn-border btn-round btn-sm">
+                                <span class="btn-label">
+                                    <i class="la la-print"></i>
+                                </span>
+                                Print
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="statisticsChart"></canvas>
+                    </div>
+                    <div id="myChartLegend"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Status Percentage</h4>
+                    <p class="card-category">
+                        Care Reserver Status percentage for Today
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="usersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+    </div>

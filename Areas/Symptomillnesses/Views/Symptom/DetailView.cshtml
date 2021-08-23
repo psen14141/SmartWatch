@@ -1,0 +1,151 @@
+﻿@model SmartWatch.Areas.Symptomillnesses.Models.ViewModels.SymptomViewModel
+
+@{
+    ViewData["Title"] = "DetailView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div>
+    <button class="w3-button w3-green" onclick="goBack()"><i class="fa fa-arrow-left"></i></button>
+    <button class="w3-button w3-blue" onclick="PrintDiv()"><i class="fa fa-print"></i></button>
+</div>
+
+
+
+<div class="w3-container w3-margin-top">
+    <h5 style="text-align:center"><b><u>詳細ビュー</u></b></h5>
+</div>
+
+<div id="divcontent">
+
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            Symptom
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Symptom1)
+        </dd>
+        <dt class="col-sm-2">
+            min warning
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MinWarning)
+        </dd>
+        <dt class="col-sm-2">
+            Max warning
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxWarning)
+        </dd>
+        <dt class="col-sm-2">
+            Time stamps
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+        <dt class="col-sm-2">
+            Min warning critical
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MinWarningCritical)
+        </dd>
+        <dt class="col-sm-2">
+            Max warning critical
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxWarningCritical)
+        </dd>
+        <dt class="col-sm-2">
+            国
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var row in Model.measuringList)
+            {
+
+                @row.MeasuringName
+
+            }
+        </dd>
+    </dl>
+</div>
+
+<div hidden id="excelprint">
+
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            Symptom
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Symptom1)
+        </dd>
+        <dt class="col-sm-2">
+            min warning
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MinWarning)
+        </dd>
+        <dt class="col-sm-2">
+            Max warning
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxWarning)
+        </dd>
+        <dt class="col-sm-2">
+            Time stamps
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+        <dt class="col-sm-2">
+            Min warning critical
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MinWarningCritical)
+        </dd>
+        <dt class="col-sm-2">
+            Max warning critical
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MaxWarningCritical)
+        </dd>
+        <dt class="col-sm-2">
+            国
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var row in Model.measuringList)
+            {
+
+                @row.MeasuringName
+
+            }
+        </dd>
+    </dl>
+</div>
+@***************************************************Go Back*****************************************************@
+<script>
+    function goBack() {
+        window.location.href = "/Symptomillnesses/Symptom/Index";
+    }
+</script>
+
+
+@***************************************************Print Data**************************************************@
+<script type="text/javascript">
+    function PrintDiv() {
+        var divContents = document.getElementById("excelprint").innerHTML;
+        var printWindow = window.open('', '', 'height=200,width=400');
+        printWindow.document.write('<html><head><title>Print DIV Content</title>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(divContents);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>

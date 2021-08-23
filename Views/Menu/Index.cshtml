@@ -1,0 +1,185 @@
+﻿@model SmartWatch.Controllers.UserInformation
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = null;
+}
+
+@if (Model.UserEnumType == SmartWatch.ProPlatform.Users.UserTypesEunum.Patient)
+{
+    <li class="nav-item">
+        <a data-toggle="collapse" href="#base">
+            <i class="la la-university"></i>
+            <p>Classes</p>
+            <span class="caret"></span>
+        </a>
+        <div class="collapse" id="base">
+            <ul class="nav nav-collapse">
+                <li>
+                    <a href="/TaskAllocation/HomeWork/Index">
+                        <span class="sub-item">Assingment</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Classes/Class/Index">
+                        <span class="sub-item">Classes</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+}
+else
+{
+
+
+    <li class="nav-item active">
+        <a href="index.html">
+            <i class="flaticon-home"></i>
+            <p>Dashboard</p>
+            <span class="badge badge-count">5</span>
+        </a>
+    </li>
+    <li class="nav-section">
+        <span class="sidebar-mini-icon">
+            <i class="la la-ellipsis-h"></i>
+        </span>
+        <h4 class="text-section">Device Manager</h4>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="collapse" href="#base">
+            <i class="flaticon-layers"></i>
+            <p>Assign Smart Watch</p>
+            <span class="caret"></span>
+        </a>
+        <div class="collapse" id="base">
+            <ul class="nav nav-collapse">
+                <li>
+                    <a href="/Devices/Device/Index">
+                        <span class="sub-item">New Device</span>
+                    </a>
+
+                   
+                </li>
+                <li>
+                    @*<a href="components/gridsystem.html">
+                        <span class="sub-item">Assign to Care Reserver</span>
+                    </a>*@
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="collapse" href="#forms">
+            <i class="flaticon-agenda-1"></i>
+            <p>Care Giver Booklet</p>
+            <span class="caret"></span>
+        </a>
+        <div class="collapse" id="forms">
+            <ul class="nav nav-collapse">
+                <li>
+                    <a href="/Branches/Branch/Index">
+                    <span class="sub-item">Companies</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Companies/Company/Index">
+                        <span class="sub-item">Companies</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Countries/Country/Index">
+                        <span class="sub-item">Countries</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="collapse" href="#tables">
+            <i class="flaticon-box"></i>
+            <p>Alert Box</p>
+            <span class="caret"></span>
+        </a>
+        <div class="collapse" id="tables">
+            <ul class="nav nav-collapse">
+                <li>
+                    <a href="/Alerts/MessageGroup/Index">
+                        <span class="sub-item">New Alert</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="tables/datatables.html">
+                        <span class="sub-item">Alert list</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="collapse" href="#maps">
+            <i class="flaticon-placeholder"></i>
+            <p>Find in map</p>
+            <span class="caret"></span>
+        </a>
+        <div class="collapse" id="maps">
+            <ul class="nav nav-collapse">
+                <li>
+                    <a href="maps/googlemaps.html">
+                        <span class="sub-item">Care Reserver</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </li>
+
+    <li class="nav-section">
+        <span class="sidebar-mini-icon">
+            <i class="la la-ellipsis-h"></i>
+        </span>
+        <h4 class="text-section">User Management</h4>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="collapse" href="#email-nav">
+            <i class="flaticon-mailbox"></i>
+            <p>Care Giver</p>
+            <span class="caret"></span>
+        </a>
+        <div class="collapse" id="email-nav">
+            <ul class="nav nav-collapse">
+                <li>
+                    <a href="/Users/DoctorProfile/Index">
+                        <span class="sub-item">Doctors</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Users/NurseProfile/Index">
+                        <span class="sub-item">Nurses</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a data-toggle="collapse" href="#care-nav">
+            <i class="flaticon-mailbox"></i>
+            <p>Care Reserver</p>
+            <span class="caret"></span>
+        </a>
+        <div class="collapse" id="care-nav">
+            <ul class="nav nav-collapse">
+                <li>
+                    <a href="/Users/PatientProfile/Index">
+                        <span class="sub-item">Add Care Reserver</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Users/PatientProfile/Index">
+                        <span class="sub-item">Search Care Reserver</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    }

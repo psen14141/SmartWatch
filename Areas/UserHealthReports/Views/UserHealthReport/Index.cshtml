@@ -1,0 +1,294 @@
+﻿@model IEnumerable<SmartWatch.DbModels.HeartRate>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<head>
+    <script type="text/javascript" src="assets/js/jquery-3.4.0.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="assets/js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="assets/js/mdb.min.js"></script>
+</head>
+
+
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+
+            <h5 class="panel-title"><center>HEART RATE </h5>
+
+
+            <canvas id="lineChart"></canvas>
+            <script>
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var ctxL = document.getElementById("lineChart").getContext('2d');
+                var myLineChart = new Chart(ctxL, {
+                    type: 'line',
+                    data:
+                    {
+                        labels: [time],
+                        datasets: [{
+                            label: "Blood Rate",
+                            fill: false,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(255,0,0,1.00)",
+                            borderColor: "rgba(255,0,0,1.00)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(255,0,0,1.00)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(255,0,0,1.00)",
+                            pointHoverBorderColor: "rgba(255,0,0,1.00)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data: [],
+                            spanGaps: false,
+                        }
+                        ]
+                    },
+                    options:
+                    {
+                        responsive: true
+                    }
+                });
+                function add_data() {
+                    var json_url = "/UserHealthReports/UserHealthReport/GetHeartRateData";
+                    var data1 = data1 || {};
+
+                    $.getJSON(json_url, data1).done(function (response) {
+                        //alert(JSON.stringify(response));
+                        myLineChart.data.labels = response.labels;
+                        myLineChart.data.datasets[0].data = response.data.heartRate; // or you can iterate for multiple datasets
+                        myLineChart.update(); // finally update our chart
+                    });
+
+                }
+                setInterval(add_data, 1000); //milisecond
+            </script>
+        </div>
+        <div class="col-lg-6">
+            <h5 class="panel-title"><center>BODY TEMPERATURE </h5>
+
+
+            <canvas id="myChartTemp"></canvas>
+            <script>
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var ctxL = document.getElementById("myChartTemp").getContext('2d');
+                var myLineChartT = new Chart(ctxL, {
+                    type: 'line',
+                    data:
+                    {
+                        labels: [time],
+                        datasets: [{
+                            label: "Body Temperature",
+                            fill: false,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(255,0,0,1.00)",
+                            borderColor: "rgba(255,0,0,1.00)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(255,0,0,1.00)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(255,0,0,1.00)",
+                            pointHoverBorderColor: "rgba(255,0,0,1.00)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data: [],
+                            spanGaps: false,
+                        }
+                        ]
+                    },
+                    options:
+                    {
+                        responsive: true
+                    }
+                });
+                function add_data1() {
+                    var json_url = "/UserHealthReports/UserHealthReport/GetBTemperatureData";
+                    var data1 = data1 || {};
+
+                    $.getJSON(json_url, data1).done(function (response) {
+                        //alert(JSON.stringify(response));
+                        myLineChartT.data.labels = response.labels;
+                        myLineChartT.data.datasets[0].data = response.data.BTemperature; // or you can iterate for multiple datasets
+                        myLineChartT.update(); // finally update our chart
+                    });
+
+                }
+                setInterval(add_data1, 1000); //milisecond
+            </script>
+        </div>
+    </div>
+
+     @*this is second row*@
+
+    <div class="row">
+        <div class="col-lg-6">
+
+            <h5 class="panel-title"><center>STEP COUNT </h5>
+
+
+            <canvas id="lineChartsteps"></canvas>
+            <script>
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var ctxL = document.getElementById("lineChartsteps").getContext('2d');
+                var myLineChartsteps = new Chart(ctxL, {
+                    type: 'line',
+                    data:
+                    {
+                        labels: [time],
+                        datasets: [{
+                            label: "Step Count",
+                            fill: false,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(255,0,0,1.00)",
+                            borderColor: "rgba(255,0,0,1.00)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(255,0,0,1.00)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(255,0,0,1.00)",
+                            pointHoverBorderColor: "rgba(255,0,0,1.00)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data: [],
+                            spanGaps: false,
+                        }
+                        ]
+                    },
+                    options:
+                    {
+                        responsive: true
+                    }
+                });
+                function add_data2() {
+                    var json_url = "/UserHealthReports/UserHealthReport/GetStepCountData";
+                    var data1 = data1 || {};
+
+                    $.getJSON(json_url, data1).done(function (response) {
+                        //alert(JSON.stringify(response));
+                        myLineChartsteps.data.labels = response.labels;
+                        myLineChartsteps.data.datasets[0].data = response.data.stepCount; // or you can iterate for multiple datasets
+                        myLineChartsteps.update(); // finally update our chart
+                    });
+
+                }
+                setInterval(add_data2, 1000); //milisecond
+            </script>
+        </div>
+        <div class="col-lg-6">
+            <h5 class="panel-title"><center>BLOOD PRESSURE </h5>
+
+
+            <canvas id="myChartBPressure"></canvas>
+            <script>
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var ctxL = document.getElementById("myChartBPressure").getContext('2d');
+                var myLineChartBP = new Chart(ctxL, {
+                    type: 'line',
+                    data:
+                    {
+                        labels: [time],
+                        datasets: [{
+                            label: "Blood Pressure Upper",
+                            fill: false,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(255,0,0,1.00)",
+                            borderColor: "rgba(255,0,0,1.00)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(255,0,0,1.00)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(255,0,0,1.00)",
+                            pointHoverBorderColor: "rgba(255,0,0,1.00)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data: [],
+                            spanGaps: false,
+                        },
+                            {
+                                label: "Blood Pressure Lower",
+                                fill: false,
+                                lineTension: 0.1,
+                                backgroundColor: "rgba(0,0,255,1.00)",
+                                borderColor: "rgba(0,0,255,1.00)",
+                                borderCapStyle: 'butt',
+                                borderDash: [],
+                                borderDashOffset: 0.0,
+                                borderJoinStyle: 'miter',
+                                pointBorderColor: "rgba(0,0,255,1.00)",
+                                pointBackgroundColor: "#fff",
+                                pointBorderWidth: 1,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: "rgba(0,0,255,1.00)",
+                                pointHoverBorderColor: "rgba(0,0,255,1.00)",
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 1,
+                                pointHitRadius: 10,
+                                //data: BloodPressureLower,
+                                data: [],
+                                spanGaps: false,
+                            }
+                        ]
+                    },
+                    options:
+                    {
+                        responsive: true
+                    }
+                });
+                function add_data3() {
+                    var json_url = "/UserHealthReports/UserHealthReport/GetBloodPressureData";
+                    var data1 = data1 || {};
+
+                    $.getJSON(json_url, data1).done(function (response) {
+                        //alert(JSON.stringify(response));
+                        myLineChartBP.data.labels = response.labels;
+                        myLineChartBP.data.datasets[0].data = response.data.BPressure;
+                        myLineChartBP.data.datasets[1].data = response.data.BPL;// or you can iterate for multiple datasets
+                        myLineChartBP.update(); // finally update our chart
+                    });
+
+                }
+                setInterval(add_data3, 1000); //milisecond
+            </script>
+        </div>
+    </div>
+
+
+
+
+</div>

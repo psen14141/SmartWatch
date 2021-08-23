@@ -1,0 +1,265 @@
+﻿@model IEnumerable<SmartWatch.DbModels.Illness>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+        $('#dtDesign').DataTable({
+            "lengthMenu": [10, 20, 30, 40, 50],
+            "language": {
+                "search": "検索:",
+                "paginate": {
+                    "first": "一ページ目",
+                    "last": "最後のページ",
+                    "next": "次へ",
+                    "previous": "前へ"
+                },
+                "lengthMenu": " _MENU_ 件表示",
+                "info": "検索結果 _TOTAL_ 以上 のうち _START_ ~ _END_件",
+                "infoEmpty": "検索結果 0 以上 のうち 0 ~ 0件",
+                "emptyTable": "条件に一致する結果は見つかりませんでした",
+                "zeroRecords": "条件に一致する結果は見つかりませんでした",
+            },
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<p>
+    <button class="w3-button w3-green" onclick="goBack()"><i class="fa fa-arrow-left"></i></button>
+    <button class="w3-button w3-blue" onclick="Illnessnformation(0)"><i class="fa fa-save"></i></button>
+    <button class="w3-button w3-light-blue" onclick="PrintDiv() "><i class="fa fa-print"></i></button>
+    @*<button id="btnExcel" class="w3-button w3-light-gray"><i class="fa fa-file-excel-o"></i></button>*@
+<p>
+    <a asp-action="Create" style="font-size:14px; padding-right:10px">戻 る</a>
+    <a asp-action="Create" style="font-size:14px; padding-right:10px"> 登録</a>
+    <a asp-action="Create" style="font-size:14px; padding-right:10px">印 刷</a>
+    @*<a asp-action="Create" style="font-size:15px; padding-right:10px">エクセル出力</a>*@
+</p>
+
+
+<div class="w3-container w3-margin-top w3-gray ">
+    <h5 style="text-align:center"><b><u>病気</u></b></h5>
+</div>
+<br />
+
+<table id="dtDesign" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>
+                病気
+            </th>
+            <th>
+                説明
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IllNessName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IllnessDescription)
+                </td>
+                <td>
+                    <a href="#" onclick="Illnessnformation(@item.IllNessId)" class="btn btn-primary">編集</a>
+                    <a href="/Symptomillnesses/Illness/DetailView/?Id=@item.IllNessId" class="btn btn-success" target="_blank">詳細</a>
+                    @*<a class="btn btn-danger" onclick="DeleteConfirmation('/Symptomillnesses/Illness/Delete/?Id=@item.IllNessId', null, null, true, 'Warning', 'GlobalCommunication')">Delete</a>*@
+                    <a class="btn btn-danger" style="color: white;" onclick="DeleteConfirmation('/Symptomillnesses/Illness/Delete/?Id=@item.IllNessId', null, null, true, '削除しますか？', 'このデータを完全に消去しました。')">削除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*ExcelPrint*@
+
+<div hidden id="ExcelPrint">
+    <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>病気</th>
+                <th>説明</th>
+
+            </tr>
+        </thead>
+        <tbody id="datatbody2">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.IllNessName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IllNessId)</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<div id="AddorEditView" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">病気のセクション</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="formArea">
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="SaveChanges()" class="btn btn-primary">登録</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Illnessnformation(id) {
+        $('#AddorEditView').modal(); //open the model
+        $("#formArea").html(""); // Clear existing area
+        //alert("test message!");
+        $.ajax({
+            method: "GET",
+            url: "/Symptomillnesses/Illness/AddorEditView/" + id,
+        })
+            .done(function (msg) {
+                $("#formArea").html(msg);
+
+            });
+    }
+
+    function SaveChanges() {
+
+        let postData = new FormData();
+        postData.append('IllNessId', $("#IllNessId").val());
+        postData.append('IllNessName', $("#IllNessName").val());
+        postData.append('IllnessDescription', $("#IllnessDescription").val());
+
+
+        $.ajax({
+            method: "POST",
+            url: "/Symptomillnesses/Illness/SaveChanges/",
+            enctype: 'multipart/form-data',
+            data: postData,
+            contentType: false,
+            processData: false,
+        })
+            .done(function (msg) {
+                $('#AddOrEditView').modal('hide')
+                alert("Data has saved");
+                location.reload();
+            });
+    }
+    $(document).ready(function () {
+        $('#dtDesign').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    });
+    function GetConfirmation() {
+        var reply = confirm("Are you sure you want to delete this?");
+        if (reply) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+</script>
+
+<script>
+    function goBack() {
+        window.location.href = "/Home";
+    }
+</script>
+
+@***************************************************Data Length**************************************************@
+<script>
+    $("input").on("keyup", function () {
+        var maxLength = $(this).attr("maxlength");
+        if (maxLength == $(this).val().length) {
+            alert("Characters length exceeds the Limit, please input less than " + maxLength + " characters");
+        }
+    })
+
+    $("textarea").on("keyup", function () {
+        var maxLength = $(this).attr("maxlength");
+        if (maxLength == $(this).val().length) {
+            alert("Characters length exceeds the Limit, please input less than " + maxLength + " characters");
+        }
+    })
+
+</script>
+
+
+
+
+
+@***************************************************Length*************************************************@
+<script>
+    $("input").on("keyup", function () {
+        var maxLength = $(this).attr("maxlength");
+        if (maxLength == $(this).val().length) {
+            alert("Characters length exceeds the Limit, please input less than " + maxLength + " characters");
+        }
+    })
+
+    $("textarea").on("keyup", function () {
+        var maxLength = $(this).attr("maxlength");
+        if (maxLength == $(this).val().length) {
+            alert("Characters length exceeds the Limit, please input less than " + maxLength + " characters");
+        }
+    })
+</script>
+
+@***************************************************Print Data**************************************************@
+<script type="text/javascript">
+    function PrintDiv() {
+        var divContents = document.getElementById("ExcelPrint").innerHTML;
+        var printWindow = window.open('', '', 'height=200,width=400');
+        printWindow.document.write('<html><head><title>Print DIV Content</title>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(divContents);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>
+
+
+@***************************************************Excel File**************************************************@
+
+<script>
+    $("#btnExcel").click(function () {
+        tableToExcel('ExcelPrint', 'W3C Example Table');
+    });
+
+
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (table, name) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+</script>
+
+
+

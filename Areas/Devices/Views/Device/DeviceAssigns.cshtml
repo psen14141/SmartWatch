@@ -1,0 +1,125 @@
+﻿
+@model IEnumerable<SmartWatch.Areas.Devices.Models.ViewModels.DeviceAssignViewModel>
+@{
+    ViewData["Title"] = "DeviceAssigns";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+     <a class="btn btn-primary mb-3" href="#" onclick="DeviceAssignAdd(0, @ViewBag.deviceids)">Assign User</a>
+</p>
+
+<script>
+    $(document).ready(function () {
+        $('#dtDesign').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+
+<table id="dtDesign" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>
+                Device Id
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                AssignDateStart
+            </th>
+            <th>
+                AssignDateEnd
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeviceId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssignDateStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssignDateEnd)
+                </td>
+              
+            <td>
+                @*<a class="btn btn-primary" href="/Devices/Device/DeviceAssignAdd/?Id=@item.ConnectNo' + '&deviceids=' +@ViewBag.deviceids)"> Edit </a>*@
+                @*<a class="btn btn-primary" href='/Devices/Device/DeviceAssignAdd/?Id=@item.ConnectNo&deviceids=@ViewBag.deviceids'>Edit </a>*@
+                @*<a href="#" class="btn btn-primary " onclick="DeviceAssignAdd(@item.ConnectNo, '&deviceids=' +@ViewBag.deviceids)">Edit</a>*@
+                <a href="#" class="btn btn-primary " onclick="DeviceAssignAdd(@item.ConnectNo, @ViewBag.deviceids)">Edit</a>
+
+                <a class="btn btn-primary" href="/Devices/Device/DeviceStatus/?Id=@item.ConnectNo">Connection Status</a>
+                <input type="button" class="btn btn-danger" onclick="DeleteConfirmation('/Devices/Device/DeviceAssignDelete/?Id=@item.ConnectNo')" value=" Delete " />
+            </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="DeviceAssignAdd" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Device Assign</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="formArea">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="SaveDeviceAssign()" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function DeviceAssignAdd(id, deviceids) {
+        $('#DeviceAssignAdd').modal(); //open the model
+        $("#formArea").html(""); // Clear existing are
+        $.ajax({
+            method: "GET",
+            //url: "/Devices/Device/DeviceAssignAdd/?deviceids=" + id,
+            url: "/Devices/Device/DeviceAssignAdd/?Id=" + id + "&deviceids=" + deviceids,
+
+        })
+            .done(function (msg) {
+                $("#formArea").html(msg);
+
+            });
+    }
+
+
+    function SaveDeviceAssign() {
+        let postData = new FormData();
+        postData.append('ConnectNo', $("#ConnectNo").val());
+        postData.append('DeviceId', $("#DeviceId").val());
+        postData.append('UserId', $("#UserId").val());
+        postData.append('AssignDateStart', $("#AssignDateStart").val());
+        postData.append('AssignDateEnd', $("#AssignDateEnd").val());
+
+        $.ajax({
+            method: "POST",
+            url: "/Devices/Device/SaveDeviceAssign/",
+            data: postData,
+            contentType: false,
+            processData: false,
+        }).done(function (data) {
+            $('#AddorEdit').modal('hide')
+            location.reload();
+        });
+    }
+</script>

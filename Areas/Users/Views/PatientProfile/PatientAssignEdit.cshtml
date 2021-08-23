@@ -1,0 +1,61 @@
+﻿@model SmartWatch.Areas.Users.Models.ViewModels.PatientAssignViewModel
+
+@{
+    ViewData["Title"] = "Patient Assign Edit";
+   
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" action="/Users/PatientProfile/PatientAssignEdit">
+            <input name="PatientAssignId" type="hidden" id="PatientAssignId" placeholder="Patient Assign Id" value="@Model.PatientAssignId" class="form-control" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 align-self-center"><label asp-for="PatientId" class="col-md-4 text-right">Patient</label></div>
+                    <div class="col-md-8 align-self-center">
+                        <select class="form-control" name="PatientId" placeholder="Select Patient" id="PatientId">
+                            @foreach (var user in Model.users)
+                            {
+                                if (user.UserId == Model.PatientId)
+                                {
+                                    <option selected value="@user.UserId">@user.Username</option>
+                                }
+                                else
+                                {
+                                    <option  value="@user.UserId">@user.Username</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="PatientId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 align-self-center"><label asp-for="AssignedStaffId" class="col-md-4 text-right">Assigned Staff</label></div>
+                    <div class="col-md-8 align-self-center">
+                        <select class="form-control" name="AssignedStaffId" placeholder="Select Staff" id="PatientId">
+                            @foreach (var user in Model.users)
+                            {
+                                if (user.UserId == Model.AssignedStaffId)
+                                {
+                                    <option selected value="@user.UserId">@user.Username</option>
+                                }
+                                else
+                                {
+                                    <option  value="@user.UserId">@user.Username</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="AssignedStaffId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+

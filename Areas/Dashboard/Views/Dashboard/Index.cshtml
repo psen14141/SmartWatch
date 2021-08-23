@@ -1,0 +1,426 @@
+﻿@model IEnumerable<SmartWatch.DbModels.Profile>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#dtDesign').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+
+
+<div class="card border-dark mb-3" >
+    <div class="card-header">
+        <h3>患者ダッシュボード</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-md-3">
+                <div style="align-items:center"><h4>血圧 </h4></div>
+                <canvas id="pieChart1" width="200" height="200"></canvas>
+            </div>
+            <div class="col col-md-3">
+                <div style="align-items:center"><h4>心拍数 </h4></div>
+                <canvas id="pieChart2" width="200" height="200"></canvas>
+
+            </div>
+            <div class="col col-md-3">
+
+                <div style="align-items:center"><h4>体温</h4></div>
+                <canvas id="pieChart3" width="200" height="200"></canvas>
+            </div>
+            <div class="col col-md-3">
+                <div style="align-items:center"><h4>歩数</h4></div>
+                <canvas id="pieChart4" width="200" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var bp = [];
+    var heartRate = [];
+    var bodytem = [];
+    var stepCountp = [];
+
+    var options = {
+        legend: {
+            display: true,
+            position: "right"
+        },
+        plugins: {
+            datalabels: {
+                formatter: (value, ctx) => {
+
+                    let sum = 0;
+                    let dataArr = ctx.chart.data.datasets[0].data;
+                    dataArr.map(data => {
+                        sum += data;
+                    });
+                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                    return percentage;
+
+
+                },
+                color: '#fff',
+            }
+        }
+    };
+
+    var bpDrawflag = "NO";
+    var heartRateDrawflag = "NO";
+    var bodytemDrawflag = "NO";
+    var stepCountpDrawflag = "NO";
+    var data1 = [];
+
+      data1 = [{
+
+        labels: ["Criticle", "Warnning", "Normal"],
+         data: bp,
+        backgroundColor: ["#ff0000", "#ffd966", "#00b050"],
+        hoverBackgroundColor: ["#fa7070", "#fce7a4", "#6bc799"],
+        borderColor: "#fff"
+    }];
+    var data2 = [{
+
+        labels: ["Criticle", "Warnning", "Normal"],
+        data: heartRate,
+        backgroundColor: ["#ff0000", "#ffd966", "#00b050"],
+        hoverBackgroundColor: ["#fa7070", "#fce7a4", "#6bc799"],
+        borderColor: "#fff"
+    }];
+    var data3 = [{
+
+        labels: ["Criticle", "Warnning", "Normal"],
+        data: bodytem,
+        backgroundColor: ["#ff0000", "#ffd966", "#00b050"],
+        hoverBackgroundColor: ["#fa7070", "#fce7a4", "#6bc799"],
+        borderColor: "#fff"
+    }];
+    var data4 = [{
+
+        labels: ["Warnning", "Normal"],
+        data: stepCountp,
+        backgroundColor: ["#ffd966", "#00b050"],
+        hoverBackgroundColor: ["#fce7a4", "#6bc799"],
+        borderColor: "#fff"
+    }];
+
+
+
+
+
+
+
+        var canvasP1 = document.getElementById("pieChart1");
+        var ctxP1 = canvasP1.getContext('2d');
+        var myPieChart1 = new Chart(ctxP1, {
+            type: 'doughnut',
+            data: {
+                labels: ["Criticle", "Warnning", "Normal"],
+                datasets: data1
+            },
+            options: options
+        });
+
+
+
+    var canvasP2 = document.getElementById("pieChart2");
+    var ctxP2 = canvasP2.getContext('2d');
+    var myPieChart2 = new Chart(ctxP2, {
+        type: 'doughnut',
+        data: {
+
+            labels: ["Criticle", "Warnning", "Normal"],
+            datasets: data2
+        },
+        options: options
+    });
+
+    var canvasP3 = document.getElementById("pieChart3");
+    var ctxP3 = canvasP3.getContext('2d');
+    var myPieChart3 = new Chart(ctxP3, {
+        type: 'doughnut',
+        data: {
+
+            labels: ["Criticle", "Warnning", "Normal"],
+            datasets: data3
+        },
+        options: options
+    });
+
+
+    var canvasP4 = document.getElementById("pieChart4");
+    var ctxP4 = canvasP4.getContext('2d');
+    var myPieChart4 = new Chart(ctxP4, {
+        type: 'doughnut',
+        data: {
+
+            labels: ["Warnning", "Normal"],
+            datasets: data4
+        },
+        options: options
+    });
+    Chart.plugins.register({
+        afterDraw: function (chart) {
+            if (chart.data.datasets[0].data.every(item => item === 0)) {
+                let ctx = chart.chart.ctx;
+                let width = chart.chart.width;
+                let height = chart.chart.height;
+
+                chart.clear();
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('No data to display', width / 2, height / 2);
+                ctx.restore();
+            }
+        }
+    });
+
+    updateBPData();
+    function updateBPData() {
+        $.ajax({
+            url: '/Dashboard/Dashboard/getAllPatientDataCount',
+            type: 'get',
+        }).done(function (comp) {
+
+            bp[0] = comp[0];
+            bp[1] = comp[1];
+            bp[2] = comp[2];
+
+            heartRate[0] = comp[3];
+            heartRate[1] = comp[4];
+            heartRate[2] = comp[5];
+
+            bodytem[0] = comp[6];
+            bodytem[1] = comp[7];
+            bodytem[2] = comp[8];
+
+            stepCountp[0] = comp[9];
+            stepCountp[1] = comp[10];
+
+
+        });
+        myPieChart1.data.datasets[0].data = bp;
+        myPieChart1.update();
+
+        myPieChart2.data.datasets[0].data = heartRate;
+        myPieChart2.update();
+
+        myPieChart3.data.datasets[0].data = bodytem;
+        myPieChart3.update();
+
+        myPieChart4.data.datasets[0].data = stepCountp;
+        myPieChart4.update();
+
+        setTimeout(updateBPData, 1000);
+    }
+
+
+
+
+    canvasP1.onclick = function (e) {
+        var slice = myPieChart1.getElementAtEvent(e);
+        if (!slice.length) return; // return if not clicked on slice
+        var label = slice[0]._model.label;
+        switch (label) {
+            // add case for each label/slice
+            case 'Värde 5':
+                alert('clicked on slice 5');
+                window.open('www.example.com/foo');
+                break;
+            case 'Värde 6':
+                alert('clicked on slice 6');
+                window.open('www.example.com/bar');
+                break;
+            // add rests ...
+        }
+    }
+
+
+
+
+
+</script>
+
+<div class="card">
+    <div class="card-header">
+        <h3>患者の詳細リスト</h3> 
+    </div>
+    <div class="card-body">
+        <table id="dtDesign" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>
+                        患者名
+                    </th>
+
+                    <th>
+
+                        連絡先番号
+                    </th>
+                    <th>
+                        上部血圧
+                    </th>
+                    <th>
+                        より低い血圧
+                    </th>
+                    <th>
+                        毎日の歩数
+                    </th>
+                    <th>
+                        心拍数
+                    </th>
+                    <th>
+                        体温
+                    </th>
+                    <th>
+                        詳細を見る
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="PatientDashboard">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    getData();
+
+
+    function getData() {
+        var json_url = "/Dashboard/Dashboard/PatientsDetailsView";
+        var data1 = data1 || {};
+
+        $.getJSON(json_url, data1).done(function (patient) {
+
+            $("#PatientDashboard").empty();
+            for (i = 0; i < patient.length; i++) {
+
+                var fillbpu = getBloodPUpper(patient[i].bloodPressureUpper);
+                var fillbpl = getBloodPLower(patient[i].bloodPressureLower);
+                var fillhr = getHeartRate(patient[i].PulseRate);
+                var fillbt = getBodytemp(patient[i].Temperature);
+                var fillsc = getStepsCount(patient[i].Steps);
+
+                $("#PatientDashboard").append("<tr><td>" + patient[i].Username + "</td><td>" + patient[i].Mobile + "</td><td>" + fillbpu + "</td><td>" + fillbpl + "</td><td>" + fillsc + "</td><td>" + fillhr + "</td><td>" + fillbt + "</td><td><button type='button' class='btn btn-primary' onclick='sendPatientDetailView(" + patient[i].UserId + ")'>View</button></td></tr>");
+            }
+            setTimeout(getData, 1000);
+
+        });
+
+    }
+
+    function getBloodPUpper(bpu) {
+        var fillbpu;
+        if (bpu < 100) {
+            fillbpu = fillColor("#FF0000", bpu);
+        } else if (bpu >= 100 && bpu < 110) {
+
+            fillbpu = fillColor("#ffd966", bpu);
+        } else if (bpu >= 110 && bpu < 120) {
+
+            fillbpu = fillColor("#00b050", bpu);
+        } else if (bpu >= 120 && bpu < 139) {
+
+            fillbpu = fillColor("#ffd966", bpu);
+        } else if (bpu >= 140) {
+
+            fillbpu = fillColor("#FF0000", bpu);
+        }
+        return fillbpu;
+    }
+
+    function getBloodPLower(bpl) {
+        var fillbpl;
+        if (bpl < 70) {
+            fillbpl = fillColor("#FF0000", bpl);
+        } else if (bpl >= 70 && bpl < 80) {
+
+            fillbpl = fillColor("#ffd966", bpl);
+        } else if (bpl >= 80 && bpl < 90) {
+
+            fillbpl = fillColor("#00b050", bpl);
+        } else if (bpl >= 90 && bpl < 100) {
+
+            fillbpl = fillColor("#ffd966", bpl);
+        } else if (bpl >= 100) {
+
+            fillbpl = fillColor("#FF0000", bpl);
+        }
+        return fillbpl;
+    }
+
+    function getHeartRate(hr) {
+
+        var fillhr;
+        if (((hr >= 35 && hr <= 114) || (hr >= 171 && hr <= 190)) || hr == 0) {
+
+            fillhr = fillColor("#FF0000", hr);
+        } else if ((hr > 114 && hr <= 133) || (hr >= 152 && hr < 171)) {
+
+            fillhr = fillColor("#ffd966", hr);
+        } else if (hr > 133 && hr < 152) {
+
+            fillhr = fillColor("#00b050", hr);
+        }
+        return fillhr;
+    }
+
+    function getBodytemp(bt) {
+
+        var fillbt;
+        if (bt < 35) {
+
+            fillbt = fillColor("#FF0000", bt);
+        } else if (bt >= 35 && bt < 36) {
+
+            fillbt = fillColor("#ffd966", bt);
+        } else if (bt >= 36 && bt < 37) {
+
+            fillbt = fillColor("#00b050", bt);
+        } else if (bt >= 37 && bt < 38) {
+
+            fillbt = fillColor("#ffd966", bt);
+        } else if (bt >= 38) {
+
+            fillbt = fillColor("#FF0000", bt);
+        }
+        return fillbt;
+    }
+
+    function getStepsCount(sc) {
+
+        var fillsc;
+        if (sc < 8000) {
+
+            fillsc = fillColor("#ffd966", sc);
+        } else if (sc >= 8000 && sc < 12000) {
+
+            fillsc = fillColor("#00b050", sc);
+        } else if (sc >= 12000) {
+
+            fillsc = fillColor("#ffd966", sc);
+        }
+        return fillsc;
+    }
+    function fillColor(colorcode, value) {
+        var tag = "<b><p style='font-size: 15px;color:" + colorcode + ";'>" + value + "</p></b>";
+        return tag;
+    }
+    function sendPatientDetailView(userid) {
+
+        window.location.href = "/Dashboard/Dashboard/PatientsDetailsPage/?userid=" + userid;
+
+    }
+</script>

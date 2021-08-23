@@ -1,0 +1,123 @@
+﻿@model SmartWatch.Areas.Symptomillnesses.Models.ViewModels.SymptomViewModel
+
+@{
+    ViewData["Title"] = "AddorEditView";
+    Layout = null;
+}
+
+<h3>
+    症状を追加
+</h3>
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form class="form-horizontal" method="post" action="/Symptomillnesses/Symptom/SaveChanges">
+            <input type="hidden" name="SymptomId" id="SymptomId" class="form-control" value="@Model.SymptomId" />
+            <span asp-validation-for="SymptomId" class="text-danger"></span>
+
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="Symptom1" class="control-label">症状</label>
+                    </div>
+                    <div class="col-md-8 align-self-cente input-group-append">
+                        <input name="Symptom1" id="Symptom1" class="form-control" value="@Model.Symptom1" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="MinWarning" class="control-label">最小限 警告</label>
+                    </div>
+                    <div class="col-md-8 align-self-cente input-group-append">
+                        <input name="MinWarning" id="MinWarning" class="form-control" value="@Model.MinWarning" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="MaxWarning" class="control-label">最大警告</label>
+                    </div>
+                    <div class="col-md-8 align-self-cente input-group-append">
+                        <input name="MaxWarning" id="MaxWarning" class="form-control" value="@Model.MaxWarning" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="Timestamp" class="control-label">タイムスタンプ</label>
+                    </div>
+                    <div class="col-md-8 align-self-cente input-group-append">
+                        <input name="Timestamp" id="Timestamp" class="form-control" value="@Model.Timestamp.ToString("yyyy/MM/dd HH:mm:ss")" />
+                        <span class="input-group-text">
+                            <i class="la la-calendar-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="MinWarningCritical" class="control-label">Min Critical</label>
+                    </div>
+                    <div class="col-md-8 align-self-cente input-group-append">
+                        <input name="MinWarningCritical" id="MinWarningCritical" class="form-control" value="@Model.MinWarningCritical" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="MaxWarningCritical" class="control-label">Max Critical</label>
+                    </div>
+                    <div class="col-md-8 align-self-cente input-group-append">
+                        <input name="MaxWarningCritical" id="MaxWarningCritical" class="form-control" value="@Model.MaxWarningCritical" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="MeasuringId" class="control-label">測定</label>
+                    </div>
+                    <div class="col-md-8">
+                        <select name="MeasuringId" placeholder="測定" id="MeasuringId" class="form-control">
+                            @foreach (var measuring in Model.measuringList)
+                            {
+                                if (measuring.MeasuringId == Model.MeasuringId)
+                                {
+                                    <option  selected value="@measuring.MeasuringId">
+                                        @measuring.MeasuringName
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@measuring.MeasuringId">
+                                        @measuring.MeasuringName
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+<script>
+    $('#Timestamp').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm',
+
+    });
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

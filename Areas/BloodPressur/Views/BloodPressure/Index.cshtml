@@ -1,0 +1,336 @@
+﻿@model IEnumerable<SmartWatch.DbModels.BloodPressure>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    @*<script type="text/javascript" src="assets/js/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="assets/js/popper.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/mdb.min.js"></script>*@
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap-extended.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/colors.min.css">
+    <link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/4b7cd4418d.js" crossorigin="anonymous"></script>
+</head>
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><center>血圧の視覚化</h3>
+        </div>
+        <div class="row">
+            <div class="col-4 mt-3 mb-1">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="align-self-center">
+                                    <i class='fas fa-phone-volume danger font-large-2'></i>
+                                </div>
+                                <div class="media-body text-right">
+                                    <p id="name"><h3 class="text-uppercase"></h3></p>
+                                    <p id="contactNo"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 mt-3 mb-1">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="align-self-center">
+                                    <i class="fas fa-heartbeat danger font-large-2 float-left"></i>
+                                </div>
+                                <div class="media-body text-right">
+                                    <p id="hbp"><h3></h3></p>
+                                    <p>高い血圧</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 mt-3 mb-1">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="media d-flex">
+                                <div class="align-self-center">
+                                    <i class="fas fa-heartbeat primary font-large-2 float-left"></i>
+                                </div>
+                                <div class="media-body text-right">
+                                    <p id="lbp"><h3></h3></p>
+                                    <p>低血圧</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <form method="GET" id="form-id" action="/BloodPressur/BloodPressure/GetBloodPressureData/">
+                <div class="row" style="height:40px">
+                    <div class="col-md-5 align-self-cente input-group-append" style="height:35px">
+                        <div class="col-md-4 align-self-center" style="height:35px"><label asp-for="FromDate" class="col-md-6 text-right" style="height:35px">日付から</label></div>
+                        <div class="col-md-6 align-self-cente input-group-append" style="height:35px">
+                            <input type="text" class="form-control" id="FromDate" name="FromDate" placeholder="From Date" value="@DateTime.Now.ToString("yyyy/MM/dd")" style="height:35px">
+                            <span class="input-group-text" style="height:35px">
+                                <i class="la la-calendar-o"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-5 align-self-cente input-group-append" style="height:35px">
+                        <div class="col-md-4 align-self-center" style="height:25px"><label asp-for="ToDate" class="col-md-6 text-right" style="height:35px">現在まで</label></div>
+                        <div class="col-md-6 align-self-cente input-group-append" style="height:35px">
+                            <input type="text" class="form-control" id="ToDate" name="ToDate" placeholder="To Date" value="@DateTime.Now.ToString("yyyy/MM/dd")" style="height:35px">
+
+                            <span class="input-group-text" style="height:35px">
+                                <i class="la la-calendar-o"></i>
+                            </span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-2 align-self-cente input-group-append" style="height:40px">
+                        <a class="btn btn-primary mb-3" href="#" id="DateRange" style="height:35px" onclick="show_data()">検索</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="panel-body">
+            <canvas id="lineChart"></canvas>
+            <script>
+                var today = new Date();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var ctxL = document.getElementById("lineChart").getContext('2d');
+                var myLineChart = new Chart(ctxL, {
+                    type: 'line',
+                    data:
+                    {
+                        labels: [time],
+                        datasets: [{
+                            label: "高い血圧",
+                            fill: false,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(255,0,0,1.00)",
+                            borderColor: "rgba(255,0,0,1.00)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(255,0,0,1.00)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(0,0,0,1.00)",
+                            pointHoverBorderColor: "rgba(0,0,0,1.00)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data: [],
+                            spanGaps: false,
+                        },
+                        {
+                            label: "低血圧",
+                            fill: false,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(0,0,255,1.00)",
+                            borderColor: "rgba(0,0,255,1.00)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(0,0,255,1.00)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(0,0,0,1.00)",
+                            pointHoverBorderColor: "rgba(0,0,0,1.00)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data: [],
+                            spanGaps: false,
+                        }
+                        ]
+                    },
+                    options:
+                    {
+                        responsive: true
+                    }
+                });
+
+
+                function show_data() {
+                    clearInterval(dataInterval);
+                    var id = @ViewBag.id;
+                    var fromdate = document.getElementById('FromDate').value;
+                    var todate = document.getElementById('ToDate').value;
+
+                    var jsonUrl = "/BloodPressur/BloodPressure/BloodPresureDateFilter/?UserId=" + id + "&fromdate=" + fromdate + "&todate=" + todate;
+                    var data1 = data1 || {};
+                    //alert(jsonUrl);
+                    $.getJSON(jsonUrl, data1).done(function (response) {
+                        //alert(JSON.stringify(response));
+                        myLineChart.data.labels = response.labels;
+                        myLineChart.data.datasets[0].data = response.data.BPU; //Blood Pressure Upper
+                        myLineChart.data.datasets[1].data = response.data.BPL;// LBlood Presure Lower
+                        myLineChart.update(); // finally update our chart
+                    });
+                }
+
+
+
+
+                function add_data() {
+                    var id = @ViewBag.id;
+                    var json_url = "/BloodPressur/BloodPressure/GetBloodPressureData/?Id=" + id;
+                    var data1 = data1 || {};
+
+
+                    $.getJSON(json_url, data1).done(function (response) {
+                        //alert(JSON.stringify(response));
+                        myLineChart.data.labels = response.labels;
+                        myLineChart.data.datasets[0].data = response.data.BPU; //Blood Pressure Upper
+                        myLineChart.data.datasets[1].data = response.data.BPL;// LBlood Presure Lower
+                        myLineChart.update(); // finally update our chart
+                    });
+
+                }
+                var dataInterval = setInterval(add_data, 1000); //milisecond
+            </script>
+
+            <script src="/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+            <script>
+
+                $('#FromDate').datetimepicker({
+                    format: 'YYYY/MM/DD',
+
+                });
+                $('#ToDate').datetimepicker({
+                    format: 'YYYY/MM/DD',
+                });
+
+            </script>
+
+            <script>
+                var straDate = document.getElementById('FromDate').value;
+                $("#FromDate").on("dp.change", function (stratDate) {
+                    $('#ToDate').data("DateTimePicker").minDate(stratDate.date);
+                });
+            </script>
+
+            <script>
+                var form = document.getElementById("form-id");
+
+                document.getElementById("your-id").addEventListener("click", function () {
+                    form.submit();
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('#FromDate').datetimepicker({
+        format: 'YYYY/MM/DD',
+    });
+
+    $('#ToDate').datetimepicker({
+        format: 'YYYY/MM/DD',
+    });
+</script>
+
+
+
+<script>
+
+
+    getData();
+
+
+    function getData() {
+        var json_url = "/BloodPressur/BloodPressure/PatientsDetailsViewById/?userid=" + @ViewBag.userid;
+        var data1 = data1 || {};
+
+        $.getJSON(json_url, data1).done(function (patient) {
+
+
+            $("#hbp").empty();
+            $("#lbp").empty();
+            $("#name").empty();
+            $("#contactNo").empty();
+            for (i = 0; i < patient.length; i++) {
+                var fillbpu = getBloodPUpper(patient[i].bloodPressureUpper);
+                var fillbpl = getBloodPLower(patient[i].bloodPressureLower);
+                $("#name").append("<p id='name'><b><h3 class='text-uppercase'>" + patient[i].Username + "</h3></b></p>");
+                $("#contactNo").append("<p id ='contactNo'>" + patient[i].Mobile + "</p>");
+                $("#hbp").append("<h3>" + fillbpu + "</h3>");
+                $("#lbp").append("<h3>" + fillbpl+ "</h3>");
+
+
+            }
+            setTimeout(getData, 1000);
+
+        });
+
+    }
+</script>
+
+
+<script>
+    function getBloodPUpper(bpu) {
+        var fillbpu;
+        if (bpu < 100) {
+            fillbpu = fillColor("#FF0000", bpu);
+        } else if (bpu >= 100 && bpu < 110) {
+
+            fillbpu = fillColor("#ffd966", bpu);
+        } else if (bpu >= 110 && bpu < 120) {
+
+            fillbpu = fillColor("#00b050", bpu);
+        } else if (bpu >= 120 && bpu < 139) {
+
+            fillbpu = fillColor("#ffd966", bpu);
+        } else if (bpu >= 140) {
+
+            fillbpu = fillColor("#FF0000", bpu);
+        }
+        return fillbpu;
+    }
+
+    function getBloodPLower(bpl) {
+        var fillbpl;
+        if (bpl < 70) {
+            fillbpl = fillColor("#FF0000", bpl);
+        } else if (bpl >= 70 && bpl < 80) {
+
+            fillbpl = fillColor("#ffd966", bpl);
+        } else if (bpl >= 80 && bpl < 90) {
+
+            fillbpl = fillColor("#00b050", bpl);
+        } else if (bpl >= 90 && bpl < 100) {
+
+            fillbpl = fillColor("#ffd966", bpl);
+        } else if (bpl >= 100) {
+
+            fillbpl = fillColor("#FF0000", bpl);
+        }
+        return fillbpl;
+    }
+
+    function fillColor(colorcode, value) {
+        var tag = "<b><p style='font-size: 30px;color:" + colorcode + ";'>" + value + "</p></b>";
+        return tag;
+    }
+</script>

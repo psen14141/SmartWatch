@@ -1,0 +1,37 @@
+﻿@model SmartWatch.Areas.Alerts.Models.ViewModels.MessageGroupViewModel
+
+@{
+    ViewData["Title"] = "AddorEdit";
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" action="/Alerts/MessageGroup/SaveMessageGroup">
+
+            <input name="GroupId" id="GroupId" type="hidden" class="form-control" value="@Model.GroupId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="Name" class="col-md-4 text-right">Name</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input name="Name" placeholder="Name" id="Name" class="form-control" value="@Model.Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

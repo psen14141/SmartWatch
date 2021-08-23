@@ -1,0 +1,45 @@
+﻿@model SmartWatch.Areas.Symptomillnesses.Models.ViewModels.IllnessViewModel
+
+@{
+    ViewData["Title"] = "AddorEditView";
+    Layout = null ;
+}
+
+<h2>
+    病気を追加
+</h2>
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form class="form-horizontal" method="post" action="/Symptomillnesses/Illness/SaveChanges">
+            <input type="hidden" name="IllNessId" id="IllNessId" class="form-control" value="@Model.IllNessId" />
+            <span asp-validation-for="IllNessId" class="text-danger"></span>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="IllNessName" class="control-label">病気</label>
+                    </div>
+                    <div class="col-md-8 align-self-cente input-group-append">
+                        <input name="IllNessName" id="IllNessName" class="form-control" value="@Model.IllNessName" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="IllnessDescription" class="control-label">説明</label>
+                    </div>
+                    <div class="col-md-8 align-self-cente input-group-append">
+                        <input name="IllnessDescription" id="IllnessDescription" class="form-control" value="@Model.IllnessDescription" />
+                    </div>
+                </div>
+            </div>     
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,253 @@
+﻿@model IEnumerable<SmartWatch.Areas.BdyTemperature.Models.ViewModel.BodyTemperatureViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <script type="text/javascript" src="assets/js/jquery-3.4.0.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="assets/js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="assets/js/mdb.min.js"></script>
+</head>
+
+
+<div class="panel-heading">
+    <center>
+        <h3 class="panel-title">BODY TEMPERATURE VISULIZATION</h3>
+    </center>
+</div>
+
+<style>
+    #parent {
+        display: flex;
+    }
+
+    #narrow {
+        width: 400px;
+        /*        background: lightblue;
+        */
+    }
+
+    #wide {
+        flex: 1;
+        /* Grow to rest of container */
+        /*        background: lightgreen;
+        */
+    }
+
+    canvas {
+        width: 800px !important;
+        height: 400px !important;
+    }
+
+    #outer {
+        width: 100%;
+        text-align: center;
+    }
+
+    .inner {
+        display: inline-block;
+    }
+</style>
+
+
+
+<div id="parent">
+    <div id="wide">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="height:40px">
+                    <div class="col-md-6 mx-2" id="WeeklyDiv" name="WeeklyDiv">
+                        <div class="row">
+                            <input type="hidden" id="UserId" name="UserId">
+                            <input type="hidden" id="SendCount" name="SendCount">
+                            <div class="col-md-4">
+                                <input type="datetime" class="form-control" id="FromDate"
+                                       name="FromDate" value='@DateTime.Now.ToString("yyyy/MM/dd")'>
+                            </div>
+                            <div style="padding-left:0px;">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar-o"></i>
+                                </span>
+                            </div>
+                            <div class="col-md-0.5" style="padding-left:20px;padding-top:10px;">
+                                <label>~</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="datetime" class="form-control" id="ToDate"
+                                       name="ToDate" value="">
+                            </div>
+                            <div style="padding-left:0px;">
+                                <span class="input-group-text" name="WeeklySpan" id="WeeklySpan">
+                                    <i class="la la-calendar-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1 align-self-cente input-group-append" style="height:40px">
+                        <a class="btn btn-primary mb-3" href="#" id="DateRange" style="height:35px" onclick="show_data()">Filter</a>
+                    </div>
+                    <div class="col-md-1 align-self-cente input-group-append" style="height:40px">
+                        <a class="btn btn-primary mb-3" href="#" style="height:35px" onclick="RealTime()">Real Time</a>
+                    </div>
+                    @*<div class="col-md-5 align-self-cente input-group-append" style="height:35px">
+            <div class="col-md-4 align-self-center" style="height:35px"><label asp-for="FromDate" class="col-md-6 text-right" style="height:35px">From</label></div>
+            <div class="col-md-6 align-self-cente input-group-append" style="height:35px">
+                <input type="text" class="form-control" id="FromDate" name="FromDate" placeholder="From Date" value="@DateTime.Now.ToString("yyyy/MM/dd")" style="height:35px">
+                <span class="input-group-text" style="height:35px">
+                    <i class="la la-calendar-o"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-5 align-self-cente input-group-append" style="height:35px">
+            <div class="col-md-4 align-self-center" style="height:25px"><label asp-for="ToDate" class="col-md-6 text-right" style="height:35px">To</label></div>
+            <div class="col-md-6 align-self-cente input-group-append" style="height:35px">
+                <input type="text" class="form-control" id="ToDate" name="ToDate" placeholder="To Date" value="@DateTime.Now.ToString("yyyy/MM/dd")" style="height:35px">
+
+                <span class="input-group-text" style="height:35px">
+                    <i class="la la-calendar-o"></i>
+                </span>
+
+            </div>
+        </div>
+        <div class="col-md-2 align-self-cente input-group-append" style="height:40px">
+            <a class="btn btn-primary mb-3" href="#" id="DateRange" style="height:35px" onclick="show_data()">Filter</a>
+        </div>*@
+                </div>
+            </div>
+        </div>
+
+        <form id="formDataArea">
+            <input type="hidden" id="userId" name="userId" value="@ViewBag.UserId" />
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <canvas id="lineChart"></canvas>
+                                <script>
+                                    var today = new Date();
+                                    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                                    var ctxL = document.getElementById("lineChart").getContext('2d');
+                                    var myLineChart = new Chart(ctxL, {
+                                        type: 'line',
+                                        data:
+                                        {
+                                            labels: [time],
+                                            datasets: [{
+                                                label: "Body Temperature",
+                                                fill: false,
+                                                lineTension: 0.1,
+                                                backgroundColor: "rgba(75,192,192,0.4)",
+                                                borderColor: "rgba(255,0,0,1)",
+                                                borderCapStyle: 'butt',
+                                                borderDash: [],
+                                                borderDashOffset: 0.0,
+                                                borderJoinStyle: 'miter',
+                                                pointBorderColor: "rgba(75,192,192,1)",
+                                                pointBackgroundColor: "#fff",
+                                                pointBorderWidth: 1,
+                                                pointHoverRadius: 5,
+                                                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                                                pointHoverBorderColor: "rgba(220,220,220,1)",
+                                                pointHoverBorderWidth: 2,
+                                                pointRadius: 1,
+                                                pointHitRadius: 10,
+                                                data: [],
+                                                spanGaps: false,
+                                            }
+                                            ]
+                                        },
+                                        options:
+                                        {
+                                            responsive: true
+                                        }
+                                    });
+
+                                    function show_data() {
+                                        clearInterval(dataInterval);
+                                        var id = @ViewBag.UserId;
+                                        var fromdate = document.getElementById('FromDate').value;
+                                        var todate = document.getElementById('ToDate').value;
+
+                                        var jsonUrl = "/BdyTemperature/BodyTemperature/TemperatureDateFilter/?UserId=" + id + "&fromdate=" + fromdate + "&todate=" + todate;
+                                        var data1 = data1 || {};
+
+                                        $.getJSON(jsonUrl, data1).done(function (response) {
+                                            //alert(JSON.stringify(response));
+                                            myLineChart.data.labels = response.labels;
+                                            myLineChart.data.datasets[0].data = response.data.bodyTemperature; // or you can iterate for multiple datasets
+                                            myLineChart.update(); // finally update our chart
+                                        });
+                                    }
+
+                                    function add_data() {
+                                        var id = @ViewBag.UserId;
+
+                                        var json_url = "/BdyTemperature/BodyTemperature/GetBodyTemperatureData/?UserId=" + id;
+                                        var data1 = data1 || {};
+
+                                        $.getJSON(json_url, data1).done(function (response) {
+                                            //alert(JSON.stringify(response));
+                                            myLineChart.data.labels = response.labels;
+                                            myLineChart.data.datasets[0].data = response.data.bodyTemperature; // or you can iterate for multiple datasets
+                                            myLineChart.update(); // finally update our chart
+                                        });
+
+                                    }
+                                    function RealTime() {
+                                        window.reload;
+                                    }
+                                    var dataInterval = setInterval(add_data, 1000); //milisecond
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    @*<div id="narrow">
+        <div class="card">
+            <h5 class="card-header">Paitient Details</h5>
+            <div class="card-body">
+                @foreach (var item in Model)
+                {
+                    foreach (var person in item.users)
+                    {
+                        <div class="card-body">
+                            <h5 class="card-title">Patient - @person.Username</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Patient Id: @person.ProfileId</h6>
+                            <p class="card-text">@DateTime.Now.DayOfWeek</p>
+                        </div>
+                    }
+                }
+        </div>
+        </div>
+    </div>
+</div>*@
+
+
+    <script src="/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+
+    <script>
+        $('#FromDate').datetimepicker({
+            format: 'YYYY/MM/DD',
+        });
+
+        $('#ToDate').datetimepicker({
+            format: 'YYYY/MM/DD',
+        });
+    </script>
+
+    <script>
+        var stratDate = document.getElementById('FromDate').value;
+        $("#FromDate").on("dp.change", function (stratDate) {
+            $('#ToDate').data("DateTimePicker").minDate(stratDate.date);
+        });
+    </script>

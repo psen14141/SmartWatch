@@ -1,0 +1,125 @@
+﻿
+@model IEnumerable<SmartWatch.DbModels.ConnectionStatus>
+
+@{
+    ViewData["Title"] = "DeviceStatus";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>DeviceStatus</h5>
+
+<p>
+    <a class="btn btn-primary mb-3" href="#" onclick="DeviceStatusChanges(0,@ViewBag.connId)">Add Connection status</a>
+</p>
+
+<script>
+    $(document).ready(function () {
+        $('#dtDesign').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+
+
+<table id="dtDesign" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>
+                Status
+            </th>
+            <th>
+                Sync Start Time
+            </th>
+            <th>
+                Sync EndTime
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Connect)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SyncPeriodStartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SyncPeriodEndTime)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.ConnectId)
+                    </td>*@
+            <td>
+                <a href="#" class="btn btn-primary " onclick="DeviceStatusChanges(@item.ConnectionstatusId, @ViewBag.connId)">Edit</a>
+                @*<a asp-action="Edit" asp-route-id="@item.ConnectionstatusId">Edit</a> |*@
+                @* <a asp-action="Details" asp-route-id="@item.ConnectionstatusId">Details</a> |*@
+                <input type="button" class="btn btn-danger" onclick="DeleteConfirmation('/Devices/Device/DeviceConnectionDelete/?Id=@item.ConnectionstatusId')" value=" Delete " />
+            </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="DeviceStatusChanges" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Connection Status Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="formArea">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="SaveConnectionStatus()" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function DeviceStatusChanges(id, connId) {
+        $('#DeviceStatusChanges').modal(); //open the model
+        $("#formArea").html(""); // Clear existing are
+
+        $.ajax({
+            method: "GET",
+            //url: "/Devices/Device/DeviceStatusChanges/" + id,
+            url: "/Devices/Device/DeviceStatusChanges/?Id=" + id + "&connId=" + connId,
+        })
+            .done(function (msg) {
+                $("#formArea").html(msg);
+
+            });
+    }
+
+
+    function SaveConnectionStatus() {
+
+        let postData = new FormData();
+        postData.append('ConnectionstatusId', $("#ConnectionstatusId").val());
+        postData.append('ConnectId', $("#ConnectId").val());
+        postData.append('Status', $("#Status").val());
+        postData.append('SyncPeriodStartTime', $("#SyncPeriodStartTime").val());
+        postData.append('SyncPeriodEndTime', $("#SyncPeriodEndTime").val());
+
+        $.ajax({
+            method: "POST",
+            url: "/Devices/Device/SaveConnectionStatus/",
+            data: postData,
+            contentType: false,
+            processData: false,
+        }).done(function (data) {
+            $('#DeviceStatusChanges').modal('hide')
+            location.reload();
+        });
+    }
+</script>

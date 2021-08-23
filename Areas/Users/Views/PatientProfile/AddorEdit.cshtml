@@ -1,0 +1,221 @@
+﻿@model SmartWatch.Areas.Users.Models.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "AddorEdit";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AddorEdit">
+            <input name="UserId" id="UserId" type="hidden" class="form-control" value="@Model.UserId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input name="ProfileId" id="ProfileId" type="hidden" class="form-control" value="@Model.ProfileId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input name="RoleId" id="RoleId" type="hidden" class="form-control" value="@Model.RoleId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input name="CreateTime" id="CreateTime" type="hidden" class="form-control" value="@Model.CreateTime" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="FirstName" class="col-md-4 text-right">First Name</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="FirstName" id="FirstName" placeholder="First Name" class="form-control" value="@Model.FirstName" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="LastName" class="col-md-4 text-right">Last Name</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="LastName" id="LastName" placeholder="LastName" class="form-control" value="@Model.LastName" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="Username" class="col-md-4 text-right">User Name</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Username" id="Username" placeholder="User name" class="form-control" value="@Model.Username" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="Email" class="col-md-4 text-right">Email</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Email" id="Email" placeholder="Email" class="form-control" value="@Model.Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="Mobile" class="col-md-4 text-right">Mobile</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Mobile" id="Mobile" placeholder="Mobile" class="form-control" value="@Model.Mobile" />
+                        <span asp-validation-for="Mobile" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="Address" class="col-md-4 text-right">Address</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Address" id="Address" placeholder="Address" class="form-control" value="@Model.Address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="City" class="col-md-4 text-right">City</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="City" id="City" placeholder="City" class="form-control" value="@Model.City" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="PostalCode" class="col-md-4 text-right">PostalCode</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="PostalCode" id="PostalCode" placeholder="PostalCode" class="form-control" value="@Model.PostalCode" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="CountryId" class="col-md-4 text-right">Country Name</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <div class="form-group">
+                            <select class="form-control" name="CountryId" id="CountryId" value="@Model.CountryId">
+
+                                @foreach (var type in Model.countries)
+                                {
+
+                                    if (type.CountryCode == Model.CountryId)
+                                    {
+                                        <option selected value="@type.CountryCode">@type.Country1</option>
+
+
+                                    }
+                                    else
+                                    {
+
+                                        <option selected value="@type.CountryCode">@type.Country1</option>
+
+                                    }
+
+                                }
+
+                            </select>
+
+
+                            <span asp-validation-for="CountryId" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="CompanyId" class="col-md-4 text-right">Company Name</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <div class="form-group">
+                            <select class="form-control" name="CompanyId" id="CompanyId" value="@Model.CompanyId">
+
+                                @foreach (var type in Model.companies)
+                                {
+
+                                    if (type.CompanyId == Model.CompanyId)
+                                    {
+                                        <option selected value="@type.CompanyId">@type.Name</option>
+
+
+                                    }
+                                    else
+                                    {
+
+                                        <option selected value="@type.CompanyId">@type.Name</option>
+
+                                    }
+
+                                }
+
+                            </select>
+
+
+                            <span asp-validation-for="CompanyId" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="Mobile" class="col-md-4 text-right">Password</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Password" id="Password" placeholder="Password" class="form-control" value="@Model.Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="UserSecret" class="col-md-4 text-right">UserSecret</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="UserSecret" id="UserSecret" placeholder="UserSecret" class="form-control" value="@Model.UserSecret" />
+                        <span asp-validation-for="UserSecret" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="UserDynamickey" class="col-md-4 text-right">UserDynamickey</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="UserDynamickey" id="UserDynamickey" placeholder="UserDynamickey" class="form-control" value="@Model.UserDynamickey" />
+                        <span asp-validation-for="UserDynamickey" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="Profilecol" class="col-md-4 text-right">Profilecol</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Profilecol" id="Profilecol" placeholder="Profilecol" class="form-control" value="@Model.Profilecol" />
+                        <span asp-validation-for="Profilecol" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,94 @@
+﻿@model SmartWatch.Areas.Devices.Models.ViewModels.DeviceAssignViewModel
+
+@{
+    ViewData["Title"] = "DeviceAssignAdd";
+}
+
+
+
+
+<div class="row">
+    <div class="col-lg-11">
+
+        <form method="post" action="/Devices/Device/SaveDevice">
+
+            <input name="ConnectNo" id="ConnectNo" type="hidden" class="form-control" value="@Model.ConnectNo" />
+         
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="DeviceId" class="col-md-4 text-right">DeviceId</label></div>
+                    <div class="col-md-6 align-self-cente">
+                        <input name="DeviceId" id="DeviceId" class="form-control" value="@Model.DeviceId" />
+                        <span asp-validation-for="DeviceId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4 align-self-center"><label asp-for="UserId" class="col-md-4 text-right">User Name</label></div>
+                    <div class="col-md-8 align-self-lg-start">
+                        <select class="form-control" name="UserId" id="UserId">
+                            @foreach (var type in Model.users)
+                            {
+                                if (type.UserId == Model.UserId)
+                                {
+                                    <option selected value="@type.UserId">@type.Username</option>
+                                }
+                                else
+                                {
+                                    <option  value="@type.UserId">@type.Username</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4 align-self-center"><label asp-for="AssignDateStart" class="col-md-4 text-right">AssignDateStart</label></div>
+                    <div class="col-md-8 align-self-lg-start input-group-append">
+                        <input type="text" class="form-control" id="AssignDateStart" name="AssignDateStart" placeholder="ClassEndDateTime" value='@Model.AssignDateStart.ToString("yyyy/MM/dd HH:mm:ss")'>
+
+                        <span class="input-group-text">
+                            <i class="la la-calendar-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4 align-self-center"><label asp-for="AssignDateEnd" class="col-md-4 text-right">AssignDateEnd</label></div>
+                    <div class="col-md-8 align-self-lg-start">
+                        <input name="AssignDateEnd" placeholder="AssignDateEnd" id="AssignDateEnd" class="form-control" value='@Model.AssignDateStart.ToString("yyyy/MM/dd HH:mm:ss")' />
+                        <span asp-validation-for="AssignDateEnd" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+<script>
+
+                $('#AssignDateStart').datetimepicker({
+                    format: 'YYYY/MM/DD HH:mm',
+
+                });
+                 $('#AssignDateEnd').datetimepicker({
+                    format: 'YYYY/MM/DD HH:mm',
+                });
+
+</script>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,205 @@
+﻿@model SmartWatch.Areas.Users.Models.ViewModels.RoleViewModel
+
+@{
+    ViewData["Title"] = "AddorEdit";
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" action="/Users/UserRole/SaveRole">
+
+            <input name="RoleId" id="RoleId" type="hidden" class="form-control" value="@Model.RoleId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="RoleName" class="col-md-4 text-right">Role Name</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input name="RoleName" placeholder="Role Name" id="RoleName" class="form-control" value="@Model.RoleName" />
+                        <span asp-validation-for="RoleName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="CreatedAt" class="col-md-4 text-right">CreatedAt</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input type="text" class="form-control" id="CreatedAt" name="CreatedAt" placeholder="Created Date and Time" value='@Model.CreatedAt.ToString("yyyy/MM/dd HH:mm:ss")'>
+
+                        <span class="input-group-text">
+                            <i class="la la-calendar-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="UpdatedAt" class="col-md-4 text-right">UpdatedAt</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input type="text" class="form-control" id="UpdatedAt" name="UpdatedAt" placeholder="Updated Date and Time" value='@Model.UpdatedAt.ToString("yyyy/MM/dd HH:mm:ss")'>
+
+                        <span class="input-group-text">
+                            <i class="la la-calendar-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsActive" class="col-md-4 text-right">IsActive</label></div>
+
+                    <div class="col-md-2 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsActive" id="IsActive" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsActive').val());
+
+                        $("#IsActive").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsActive').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsSystem" class="col-md-4 text-right">IsSystem</label></div>
+
+                    <div class="col-md-2 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsSystem" id="IsSystem" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsSystem').val());
+
+                        $("#IsSystem").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsSystem').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsSuperadmin" class="col-md-4 text-right">IsSuperadmin</label></div>
+
+                    <div class="col-md-2 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsSuperadmin" id="IsSuperadmin" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsSuperadmin').val());
+
+                        $("#IsSuperadmin").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsSuperadmin').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsClientRoot" class="col-md-4 text-right">IsClientRoot</label></div>
+
+                    <div class="col-md-2 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsClientRoot" id="IsClientRoot" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsClientRoot').val());
+
+                        $("#IsClientRoot").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsClientRoot').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3 align-self-center"><label asp-for="IsClient" class="col-md-4 text-right">IsClient</label></div>
+
+                    <div class="col-md-2 align-self-cente">
+                        <input type="checkbox" class="form-control fa-align-left" name="IsClient" id="IsClient" value="false" />
+                    </div>
+
+
+                    <script>
+                        $('#checkbox-value').text($('#IsClient').val());
+
+                        $("#IsClient").on('change', function () {
+                            if ($(this).is(':checked')) {
+                                $(this).attr('value', 'true');
+                            } else {
+                                $(this).attr('value', 'false');
+                            }
+
+                            $('#checkbox-value').text($('#IsClient').val());
+                        });
+                    </script>
+
+                </div>
+            </div>
+
+           
+
+        </form>
+    </div>
+</div>
+
+<script src="/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+<script>
+
+    $('#CreatedAt').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm',
+
+    });
+    $('#UpdatedAt').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm',
+    });
+
+</script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

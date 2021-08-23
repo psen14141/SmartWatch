@@ -1,0 +1,126 @@
+﻿
+@model SmartWatch.Areas.Branches.Models.ViewModels.BranchViewModel
+
+@{
+    ViewData["Title"] = "AddOrEditBranch";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" action="/Branches/Branch/SaveBranch">
+            <input name="BranchId" id="BranchId" type="hidden" class="form-control" value="@Model.BranchId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="CompanyId" class="col-md-4 text-right">会社名</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <div class="form-group">
+                            <select class="form-control" name="CompanyId" id="CompanyId">
+
+                                @foreach (var type in Model.companies)
+                                {
+                                    if (type.CompanyId == Model.CompanyId)
+                                    {
+                                        <option selected value="@type.CompanyId">@type.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option selected value="@type.CompanyId">@type.Name</option>
+                                    }
+
+                                }
+
+                            </select>
+
+                            <span asp-validation-for="CompanyId" class="text-danger"></span>
+                        </div>
+                    </div>
+                   
+                            <div class="col-md-2 align-self-center"><label asp-for="CountryCode" class="col-md-4 text-right">国の名前</label></div>
+                            <div class="col-md-4 align-self-cente">
+                                <div class="form-group">
+                                    <select class="form-control" name="CountryCode" id="CountryId">
+
+                                        @foreach (var type in Model.countries)
+                                        {
+                                            if (type.CountryCode == Model.CountryId)
+                                            {
+                                                <option selected value="@type.CountryCode">@type.Country1</option>
+                                            }
+                                            else
+                                            {
+                                                <option selected value="@type.CountryCode">@type.Country1</option>
+                                            }
+
+                                        }
+
+                                    </select>
+
+                                    <span asp-validation-for="CountryId" class="text-danger"></span>
+                                </div>
+                            </div>
+                     
+                 
+                </div>
+            </div>
+
+            
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="BranchCode" class="col-md-4 text-right">支社コード</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="BranchCode" placeholder="支社コード" id="BranchCode" class="form-control" value="@Model.BranchCode" />
+                        <span asp-validation-for="BranchCode" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="BranchName" class="col-md-4 text-right">支社名</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="BranchName" placeholder="支社名" id="BranchName" class="form-control" value="@Model.BranchName" />
+                        <span asp-validation-for="BranchName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+         
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="Location" class="col-md-4 text-right">場所</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Location" placeholder="場所" id="Location" class="form-control" value="@Model.Location" />
+                        <span asp-validation-for="Location" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-2 align-self-center"><label asp-for="Address" class="col-md-4 text-right">住所</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Address" placeholder="住所" id="Address" class="form-control" value="@Model.Address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+          
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 align-self-center"><label asp-for="Phone" class="col-md-4 text-right">電話番号</label></div>
+                    <div class="col-md-4 align-self-cente">
+                        <input name="Phone" placeholder="電話番号" id="Phone" class="form-control" value="@Model.Phone" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

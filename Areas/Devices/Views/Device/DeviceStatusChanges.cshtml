@@ -1,0 +1,121 @@
+﻿@model SmartWatch.Areas.Devices.Models.ViewModels.ConnectionStatusViewModel
+
+@{
+//ViewData["Title"] = "DeviceStatusChanges";
+//Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@*<h4>ConnectionStatus</h4>*@
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form method="post" action="/Devices/Device/SaveConnectionStatus">
+
+            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            //<input type="hidden" asp-for="ConnectionstatusId" />
+            <div class="form-group">*@
+
+
+            <input name="ConnectionstatusId" id="ConnectionstatusId" type="hidden" class="form-control" value="@Model.ConnectionstatusId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+            @*<div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="ConnectId" class="col-md-4 text-right">ConnectId</label></div>
+                    <div class="col-md-5 align-self-cente">
+                        <input name="ConnectId" type="hidden" placeholder="ConnectId" id="ConnectId" class="form-control" value="@Model.ConnectId" />
+                        <span asp-validation-for="ConnectId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>*@
+
+            <input name="ConnectId" type="hidden" placeholder="ConnectId" id="ConnectId" class="form-control" value="@Model.ConnectId" />
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="Status" class="col-md-4 text-right">Status</label></div>
+                    <div class="col-md-6 align-self-cente">
+                        <input name="Status" placeholder="Status" id="Status" class="form-control" value="@Model.Status" />
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="SyncPeriodStartTime" class="col-md-4 text-right">SyncPeriodStartTime</label></div>
+                    <div class="col-md-6 align-self-cente input-group-append">
+                        <input name="SyncPeriodStartTime" placeholder="SyncPeriodStartTime" id="SyncPeriodStartTime" class="form-control" value='@Model.SyncPeriodStartTime.ToString("yyyy/MM/dd HH:mm:ss")' />
+                        
+                        
+                        <span class="input-group-text">
+                            <i class="la la-calendar-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5 align-self-center"><label asp-for="SyncPeriodEndTime" class="col-md-4 text-right">SyncPeriodEndTime</label></div>
+                    <div class="col-md-6 align-self-cente  input-group-append">
+                        <input name="SyncPeriodEndTime" placeholder="SyncPeriodEndTime" id="SyncPeriodEndTime" class="form-control" value="@Model.SyncPeriodEndTime" />
+                        <span class="input-group-text">
+                            <i class="la la-calendar-o"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            @*<div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SyncPeriodStartTime" class="control-label"></label>
+                <input asp-for="SyncPeriodStartTime" class="form-control" />
+                <span asp-validation-for="SyncPeriodStartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SyncPeriodEndTime" class="control-label"></label>
+                <input asp-for="SyncPeriodEndTime" class="form-control" />
+                <span asp-validation-for="SyncPeriodEndTime" class="text-danger"></span>
+            </div>*@
+            @*<div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>*@
+
+
+        </form>
+    </div>
+</div>
+
+
+@*<div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
+
+
+<script src="/assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+<script>
+
+    $('#SyncPeriodStartTime').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm',
+
+    });
+    $('#SyncPeriodEndTime').datetimepicker({
+        format: 'YYYY/MM/DD HH:mm',
+    });
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
